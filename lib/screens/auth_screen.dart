@@ -61,7 +61,7 @@ class AuthScreen extends StatelessWidget {
                         ],
                       ),
                       child: Text(
-                        'MyShop',
+                        'BodyCon',
                         style: TextStyle(
                           color: Theme.of(context).accentTextTheme.title.color,
                           fontSize: 50,
@@ -95,7 +95,7 @@ class AuthCard extends StatefulWidget {
 }
 
 class _AuthCardState extends State<AuthCard> {
-  final GlobalKey<FormState> _formKey = GlobalKey();
+  final _formKey = GlobalKey<FormState>();
   AuthMode _authMode = AuthMode.Login;
   Map<String, String> _authData = {
     'email': '',
@@ -123,6 +123,7 @@ class _AuthCardState extends State<AuthCard> {
   }
 
   Future<void> _submit() async {
+    print("async");
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
@@ -132,6 +133,7 @@ class _AuthCardState extends State<AuthCard> {
       _isLoading = true;
     });
     try {
+      print("async try");
       if (_authMode == AuthMode.Login) {
         // Log user in
         await Provider.of<Auth>(context, listen: false).login(
@@ -208,7 +210,7 @@ class _AuthCardState extends State<AuthCard> {
                     if (value.isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
                     }
-                    return '';
+                    return null;
                   },
                   onSaved: (value) {
                     _authData['email'] = value;
@@ -222,7 +224,7 @@ class _AuthCardState extends State<AuthCard> {
                     if (value.isEmpty || value.length < 5) {
                       return 'Password is too short!';
                     }
-                    return '';
+                    return null;
                   },
                   onSaved: (value) {
                     _authData['password'] = value;
@@ -238,7 +240,7 @@ class _AuthCardState extends State<AuthCard> {
                             if (value != _passwordController.text) {
                               return 'Passwords do not match!';
                             }
-                            return '';
+                            return null;
                           }
                         : null,
                   ),

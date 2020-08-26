@@ -6,13 +6,14 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
+import 'keys.dart';
 
 class Auth with ChangeNotifier {
   String _token;
   DateTime _expiryDate;
   String _userId;
   Timer _authTimer;
-  const String appKey = 'AI---M';
+
   bool get isAuth {
     return token != null;
   }
@@ -32,12 +33,10 @@ class Auth with ChangeNotifier {
 
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
-    //https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=
-    //https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=$appKey';
-    //    'https://www.googleapis.com/identitytoolkit/v3/relyingparty/$urlSegment?key=AIzaSyB4smTEPUBhLFrD9EGo2FZ8nsklZFADiGM';
 
+    print("URL:$url");
     try {
       final response = await http.post(
         url,
@@ -75,6 +74,7 @@ class Auth with ChangeNotifier {
       );
       prefs.setString('userData', userData);
     } catch (error) {
+      print(error);
       throw error;
     }
   }
@@ -84,6 +84,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
+    print("login");
     return _authenticate(email, password, 'signInWithPassword');
   }
 
